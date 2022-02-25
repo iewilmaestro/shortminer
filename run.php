@@ -5,7 +5,7 @@ a = [
 "iewil",
 "shortminer",
 "https://bit.ly/3GOoZP5",
-"https://youtu.be/Dk-v5NiFNJE",
+"https://youtu.be/Kp86GOSF7FU",
 "https://pastebin.com/raw/RZxwy6dr",
 "http://ip-api.com/json"
 ],
@@ -19,7 +19,7 @@ n = "\n",
 p = "\033[1;37m",
 r = "https://company.shortminer.work/?r=TCtRPwDjCws2Vzb3ZgdBQ63NqU5E5QRt&rc=DGB",
 u = "\033[1;35m",
-v = "1.0",
+v = "1.1",
 hp = "\033[1;7m",
 mp = "\033[101m\033[1;37m",
 mm = "\033[101m\033[1;31m";
@@ -190,11 +190,46 @@ function h(){
 	];
 }
 function _l($w){
+	$h = [
+		"Host: company.shortminer.work",
+		"cache-control: max-age=0",
+		"origin: https://company.shortminer.work",
+		"upgrade-insecure-requests: 1",
+		"content-type: application/x-www-form-urlencoded",
+		"user-agent: Mozilla/5.0 (Linux; Android 8.1.0; Redmi 5 Build/OPM1.171019.026; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/71.0.3578.99 Mobile Safari/537.36",
+		"accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8",
+		"referer: ".r,
+		"accept-language: id-ID,en-US;q=0.9",
+		"x-requested-with: mark.via.gp"
+	];
 	$d = ["r"=>"TCtRPwDjCws2Vzb3ZgdBQ63NqU5E5QRt","rc"=>"DGB","microwallet"=>"FaucetPay","id1"=>$w,"currency"=>"DGB","startclaim"=>"Start claiming"];
-	return a(ht."/verify.php",h(),f($d));
+	return a(ht."/verify.php",$h,f($d));
 }
-function _gl($w){
-	return a($w,h());
+function _glogin($c){
+	$h = [
+		"Host: company.shortminer.work",
+		"cache-control: max-age=0",
+		"upgrade-insecure-requests: 1",
+		"user-agent: Mozilla/5.0 (Linux; Android 8.1.0; Redmi 5 Build/OPM1.171019.026; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/71.0.3578.99 Mobile Safari/537.36",
+		"referer: ".r,
+		"accept-language: id-ID,en-US;q=0.9",
+		"cookie: PHPSESSID=".$c,
+		"x-requested-with: mark.via.gp"
+	];
+	return a(ht."/passPage.php?",$h);
+}
+function _gl($w,$c){
+	$h = [
+		"Host: company.shortminer.work",
+		"upgrade-insecure-requests: 1",
+		"user-agent: Mozilla/5.0 (Linux; Android 8.1.0; Redmi 5 Build/OPM1.171019.026; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/71.0.3578.99 Mobile Safari/537.36",
+		"dnt: 1",
+		"referer: https://company.shortminer.work/passPage.php?",
+		"accept-language: id-ID,en-US;q=0.9",
+		"cookie: PHPSESSID=".$c,
+		"x-requested-with: mark.via.gp"
+	];
+	return a($w,$h);
 }
 function _m(){
 	$wa = file("Wallet");
@@ -204,8 +239,11 @@ function _m(){
 			system("rm cookie.txt");
 		}
 		$r = _l(trim($w));
+		$c = e($r[0],"PHPSESSID=",";",1);
+		
+		$r = _glogin($c);
 		$u = e($r[1],'var url = "','"',1);
-		$g = _gl($u);
+		$g = _gl($u,$c);
 		$s = e($g[1],'You had get ','<br>',1);
 		echo m.'['.k.'Wallet'.m.']->['.p.$n.m.']'.n;
 		if($s){
@@ -235,16 +273,27 @@ function _g(){
 		$data=file_get_contents('Wallet');
 	}
 
-	while(true){
-		$data = "utf8=✓&gp_address_coin[card]=single&gp_address_coin[coin]=litecoin&button=";
-		$generate = a('https://generate.plus/en/address/coin',$ua,$data)[1];
-		$wal = explode('</p>',explode('<u>Wallet Key:</u> ',$generate)[1])[0];
+		//$data = "utf8=✓&gp_address_coin[card]=single&gp_address_coin[coin]=litecoin&button=";
+		//$generate = a('https://generate.plus/en/address/coin',$ua,$data)[1];
+		//$wal = explode('</p>',explode('<u>Wallet Key:</u> ',$generate)[1])[0];
 		
-		system("rm cookie.txt");
+		//system("rm cookie.txt");
+		$fp = a("https://faucetpay.io/page/user-admin/linked-addresses",$uas);
+		$x = explode('<select id="coin" name="coin" class="form-control form-control-lg">',$fp[1])[1];
+		preg_match_all('#<option value="(.*?)">(.*?)</option>#i',$x,$coin);
+		foreach( $coin[2] as $cok){
+			$nom = $nom+1;
+			echo p.$nom.m." > ".h.$cok.n;
+		}
+		$w = readline(p.'Select Number '.m.'> ');
+		print l();
+		$col = $coin[1][$w-1];
+		
+	while(true){
 		$fp = a("https://faucetpay.io/page/user-admin/linked-addresses",$uas);
 		$token = explode('"',explode('type="hidden" name="token" value="',$fp[1])[1])[0];
-
-		$data = "token=".$token."&address=".$wal."&label=&coin=5&submit=true";
+		$wal = readline('Input Wallet '.p.'> ');
+		$data = "token=".$token."&address=".$wal."&label=&coin=".$col."&submit=true";
 		$link = a('https://faucetpay.io/page/user-admin/linked-addresses',$uas,$data);
 		if(preg_match('/Your address has been linked/',$link[1])){
 			$linked=$wal.n;
@@ -253,6 +302,7 @@ function _g(){
 			fclose($save);
 			sleep(5);
 			echo h.'Success ~> '.k.$wal.n;
+			print l();
 		}else{
 			echo w("Bot lelah!, Coba update cookie",'m');sleep(10);
 			echo "\r                                           \r";
@@ -263,7 +313,10 @@ function _r(){
 	t();
 	system("xdg-open ".a[3]."?sub_confirmation=1");x();
 	print b();
-	echo "1 ".m."> ".k."Linked Wallet".n;
+	echo m." Warning! 
+ dilarang menjalan kan bot bersamaan di 2 sesi!
+ karena akan menyebabkan error!".n;print l();
+	echo p."1 ".m."> ".k."Manual Linked Wallet".n;
 	echo p."2 ".m."> ".k."Run Bot ".a[1].n;
 	$p = readline(h."Input Number ".m."> ".p);
 	print l();
@@ -280,6 +333,3 @@ function _r(){
 	}
 }
 _r();
-
-
-

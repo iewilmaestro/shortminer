@@ -288,7 +288,8 @@ function _g(){
 		$w = readline(p.'Select Number '.m.'> ');
 		print l();
 		$col = $coin[1][$w-1];
-		
+		echo p." Link generator : ".k."https://walletgenerator.net/".n;
+		print l();
 	while(true){
 		$fp = a("https://faucetpay.io/page/user-admin/linked-addresses",$uas);
 		$token = explode('"',explode('type="hidden" name="token" value="',$fp[1])[1])[0];

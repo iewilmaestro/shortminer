@@ -19,7 +19,7 @@ n = "\n",
 p = "\033[1;37m",
 r = "https://company.shortminer.work/?r=TCtRPwDjCws2Vzb3ZgdBQ63NqU5E5QRt&rc=DGB",
 u = "\033[1;35m",
-v = "1.1",
+v = "1.2",
 hp = "\033[1;7m",
 mp = "\033[101m\033[1;37m",
 mm = "\033[101m\033[1;31m";
@@ -330,7 +330,9 @@ function _r(){
 		print b();
 		_g();
 	}elseif($p==2){
+		ulang:
 		_m();
+		goto ulang;
 	}
 }
 _r();
